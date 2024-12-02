@@ -1,0 +1,12 @@
+speechrecognition
+pyaudio
+numpy
+scipy
+librosa
+tensorflow  # Or torch + torchvision
+scikit-learn
+soundfile
+matplotlib
+tqdm
+transformers
+-e .
