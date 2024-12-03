@@ -31,34 +31,31 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    print(f"Request method: {request.method}")  # Debugging log
     if 'audio' not in request.files:
         flash('No file part')
-        return redirect(request.url)
+        return redirect(url_for('index'))
 
     file = request.files['audio']
-
     if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
+        flash('No file selected')
+        return redirect(url_for('index'))
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
+        
         # Save the file
         file.save(filepath)
 
         try:
-            # Perform transcription
+            # Transcription process
             transcription_result = transcribe_audio(filepath)
-            os.remove(filepath)  # Clean up after successful processing
+            os.remove(filepath)  # Remove file after successful transcription
             return render_template('result.html', transcription=transcription_result)
         except Exception as e:
-            # Log the error and clean up
             print(f"Error during transcription: {e}")
             if os.path.exists(filepath):
-                os.remove(filepath)  # Ensure file is deleted even if transcription fails
+                os.remove(filepath)
             flash("An error occurred during transcription.")
             return redirect(url_for('index'))
 

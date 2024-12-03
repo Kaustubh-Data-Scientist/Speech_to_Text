@@ -9,11 +9,12 @@
 <body>
     <div class="container">
         <h1>Upload Your Call Recording</h1>
-        <form action="/upload" method="post" enctype="multipart/form-data">
-            <label for="audio_file">Select an audio file:</label>
-            <input type="file" id="audio_file" name="audio_file" accept=".wav, .mp3, .m4a" required>
-            <button type="submit">Upload and Transcribe</button>
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="audio">Upload Audio File:</label>
+            <input type="file" name="audio" id="audio" required>
+            <button type="submit">Submit</button>
         </form>
+
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="messages">

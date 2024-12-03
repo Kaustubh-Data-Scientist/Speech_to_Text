@@ -54,11 +54,11 @@ aai.settings.api_key = AUDIO_API_KEY
 
 def transcribe_audio(file_path):
     try:
-        # Open the file and read its content into memory
+        # Read file into memory
         with open(file_path, 'rb') as audio_file:
             audio_data = audio_file.read()
-        
-        # Upload the audio content to AssemblyAI
+
+        # Upload audio data to AssemblyAI
         upload_response = transcriber.upload(audio_data)
 
         # Perform transcription
