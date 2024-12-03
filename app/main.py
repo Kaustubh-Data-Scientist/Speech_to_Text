@@ -31,30 +31,37 @@ def index():
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
-    """Handle file upload and transcription."""
-    if 'audio_file' not in request.files:
-        return flash_and_redirect('No file part', 'index')
+    print(f"Request method: {request.method}")  # Debugging log
+    if 'audio' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
 
-    file = request.files['audio_file']
+    file = request.files['audio']
+
     if file.filename == '':
-        return flash_and_redirect('No selected file', 'index')
+        flash('No selected file')
+        return redirect(request.url)
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-        
-        # Save the file temporarily
+
+        # Save the file
         file.save(filepath)
-        
-        # Transcribe the audio file
+
         try:
+            # Perform transcription
             transcription_result = transcribe_audio(filepath)
+            os.remove(filepath)  # Clean up after successful processing
             return render_template('result.html', transcription=transcription_result)
         except Exception as e:
-            os.remove(filepath)  # Remove the file if transcription fails
-            return flash_and_redirect(f"Error during transcription: {str(e)}", 'index')
-    else:
-        return flash_and_redirect('Invalid file format. Please upload a .wav, .mp3, or .m4a file.', 'index')
+            # Log the error and clean up
+            print(f"Error during transcription: {e}")
+            if os.path.exists(filepath):
+                os.remove(filepath)  # Ensure file is deleted even if transcription fails
+            flash("An error occurred during transcription.")
+            return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)

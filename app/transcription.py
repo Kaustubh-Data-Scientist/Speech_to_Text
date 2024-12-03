@@ -53,28 +53,17 @@ aai.settings.api_key = AUDIO_API_KEY
 
 
 def transcribe_audio(file_path):
-    """
-    Transcribes an audio file using AssemblyAI API with speaker diarization.
-    """
-    # Initialize the client
-    transcriber = aai.Transcriber()
+    try:
+        # Open the file and read its content into memory
+        with open(file_path, 'rb') as audio_file:
+            audio_data = audio_file.read()
+        
+        # Upload the audio content to AssemblyAI
+        upload_response = transcriber.upload(audio_data)
 
-    # Upload the audio file
-    print("Uploading the file...")
-    upload_response = transcriber.upload(file_path)
-    audio_url = upload_response.get("upload_url")
-
-    print("File uploaded. Starting transcription...")
-
-    # Start the transcription with speaker diarization enabled
-    transcript_response = transcriber.transcribe(audio_url, speaker_labels=True)
-    transcript_id = transcript_response.get("id")
-
-    # Poll for results
-    print("Waiting for transcription to complete...")
-    result = transcriber.get_transcription(transcript_id, wait=True)
-
-    if result.get("status") == "completed":
-        return result.get("text", "Transcription not found.")
-    else:
-        raise Exception("Transcription failed. Status: " + result.get("status"))
+        # Perform transcription
+        transcription_response = transcriber.transcribe(upload_response['upload_url'])
+        return transcription_response['text']
+    except Exception as e:
+        print(f"Error in transcription: {e}")
+        raise
