@@ -1,12 +1,15 @@
-speechrecognition
-pyaudio
-numpy
-scipy
-librosa
-tensorflow  # Or torch + torchvision
-scikit-learn
-soundfile
-matplotlib
-tqdm
-transformers
+SpeechRecognition==3.8.1  # For basic speech recognition
+pyaudio==0.2.13          # For handling audio input/output
+numpy>=1.21.0            # For numerical operations
+scipy>=1.7.0             # For scientific computations
+librosa==0.10.0          # For audio and music processing
+tensorflow>=2.6.0        # For machine learning models (optional)
+scikit-learn>=1.0.0      # For ML utilities
+soundfile>=0.12.1        # For reading/writing audio files
+matplotlib>=3.4.0        # For plotting (optional)
+tqdm>=4.64.0             # For progress bars
+transformers>=4.28.0     # For advanced NLP models
+Flask==2.3.3             # For building the web app
+python-dotenv==1.0.0     # For managing environment variables
+azure-cognitiveservices-speech==1.18.0  # For Azure Speech-to-Text API
 -e .
