@@ -12,4 +12,5 @@ transformers>=4.28.0     # For advanced NLP models
 Flask==2.3.3             # For building the web app
 python-dotenv==1.0.0     # For managing environment variables
 azure-cognitiveservices-speech==1.18.0  # For Azure Speech-to-Text API
+assemblyai==0.3.0       # For AssemblyAI API
 -e .

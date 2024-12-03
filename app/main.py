@@ -6,19 +6,23 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
-
 # Initialize Flask app
-app = Flask(__name__)
-app.secret_key = "your_secret_key"  # Replace with a secure key
+app = Flask(__name__, template_folder=r'C:\Users\Ajay\Desktop\Data Science\Project\Speech_to_Text\templates')
+app.secret_key = os.getenv('FLASK_SECRET_KEY', 'your_secret_key')  # Replace with a secure key
 app.config['UPLOAD_FOLDER'] = 'audio/'
 app.config['ALLOWED_EXTENSIONS'] = {'wav', 'mp3', 'm4a'}
 
 # Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
-# Function to check allowed file extensions
 def allowed_file(filename):
+    """Check allowed file extensions."""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+
+def flash_and_redirect(message, endpoint):
+    """Flash a message and redirect to a specified endpoint."""
+    flash(message)
+    return redirect(url_for(endpoint))
 
 @app.route('/')
 def index():
@@ -29,28 +33,28 @@ def index():
 def upload_file():
     """Handle file upload and transcription."""
     if 'audio_file' not in request.files:
-        flash('No file part')
-        return redirect(request.url)
+        return flash_and_redirect('No file part', 'index')
 
     file = request.files['audio_file']
-
     if file.filename == '':
-        flash('No selected file')
-        return redirect(request.url)
+        return flash_and_redirect('No selected file', 'index')
 
     if file and allowed_file(file.filename):
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        # Save the file temporarily
         file.save(filepath)
         
         # Transcribe the audio file
-        transcription_result = transcribe_audio(filepath)
-        
-        # Pass result to result.html for display
-        return render_template('result.html', transcription=transcription_result)
+        try:
+            transcription_result = transcribe_audio(filepath)
+            return render_template('result.html', transcription=transcription_result)
+        except Exception as e:
+            os.remove(filepath)  # Remove the file if transcription fails
+            return flash_and_redirect(f"Error during transcription: {str(e)}", 'index')
     else:
-        flash('Invalid file format. Please upload a .wav, .mp3, or .m4a file.')
-        return redirect(url_for('index'))
+        return flash_and_redirect('Invalid file format. Please upload a .wav, .mp3, or .m4a file.', 'index')
 
 if __name__ == '__main__':
     app.run(debug=True)
