@@ -29,8 +29,13 @@ def index():
     """Render the home page with the file upload form."""
     return render_template('index.html')
 
+print(f"File path: {filepath}")
+print(f"File exists: {os.path.exists(filepath)}")
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
+    print(f"Request method: {request.method}")  # Debugging log
     if 'audio' not in request.files:
         flash('No file part')
         return redirect(url_for('index'))
