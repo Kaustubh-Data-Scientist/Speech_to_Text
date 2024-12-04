@@ -1,111 +1,70 @@
-# Speech_to_Text
+# Speech-to-Text Application
 
-**Speech_to_Text** is a machine learning project designed to convert spoken words into text using audio processing and speech recognition techniques. This repository provides the implementation and setup instructions for the project.
-
----
+## Overview
+This project uses **AssemblyAI's API** to convert uploaded audio files into text, distinguishing between speakers in a conversation. The application is built with Flask for the backend and integrates a modern UI for ease of use.
 
 ## Features
-- Real-time speech-to-text conversion.
-- Support for multiple audio file formats (`.wav`, `.mp3`, etc.).
-- Customizable and scalable for different use cases.
-- Easy-to-use Python package structure.
+- **Upload Audio Files**: Supports `.mp3`, `.wav`, and other audio formats.
+- **Speaker Separation**: Differentiates between caller and receiver in call recordings.
+- **Real-Time Processing**: Converts audio to text efficiently using AssemblyAI.
+- **User-Friendly Interface**: Web-based UI built with HTML templates.
 
----
+## File Structure
+```
+Speech_to_Text/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── transcription.py
+│   ├── upload.py
+├── templates/
+│   ├── index.html
+│   ├── result.html
+├── audio/
+├── requirements.txt
+├── .env
+```
 
-## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Requirements](#requirements)
-- [Contributing](#contributing)
-- [License](#license)
+## Setup Instructions
 
----
-
-## Installation
-1. **Clone the repository:**
+1. **Clone the Repository**:
    ```bash
    git clone https://github.com/Kaustubh-Data-Scientist/Speech_to_Text.git
    cd Speech_to_Text
    ```
 
-2. **Set up a virtual environment (optional but recommended):**
+2. **Create a Virtual Environment**:
    ```bash
    python -m venv venv
    source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. **Install dependencies:**
+3. **Install Dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Install the project as a package:**
-   ```bash
-   python setup.py install
-   ```
+4. **Add AssemblyAI API Key**:
+   - Create a `.env` file:
+     ```plaintext
+     ASSEMBLYAI_API_KEY=your_api_key_here
+     ```
+   - Replace `your_api_key_here` with your actual API key.
 
----
+5. **Run the Application**:
+   ```bash
+   flask run
+   ```
+   Access the app at `http://127.0.0.1:5000`.
 
 ## Usage
-1. **Run the main script**:
-   ```bash
-   python main.py
-   ```
-   Replace `main.py` with the script handling the core functionality of your project.
-
-2. **Customize parameters**:
-   Update configurations in the project to suit your audio input/output and other preferences.
-
-3. **Add your audio files**:
-   Place audio files in the appropriate directory (e.g., `data/`) and specify the file path in the script.
-
----
-
-## Project Structure
-```
-Speech_to_Text/
-├── data/               # Folder for storing audio files
-├── src/                # Core source code
-│   ├── __init__.py     # Makes src a package
-│   ├── preprocessing/  # Scripts for audio preprocessing
-│   └── model/          # Scripts for model training and inference
-├── tests/              # Unit and integration tests
-├── requirements.txt    # List of dependencies
-├── setup.py            # Package configuration
-└── README.md           # Project documentation
-```
-
----
+1. Visit the homepage.
+2. Upload a supported audio file.
+3. View the transcribed text and speaker separation.
 
 ## Requirements
-See [requirements.txt](./requirements.txt) for a list of dependencies. Key libraries include:
-- `speechrecognition`
-- `numpy`
-- `librosa`
-- `pyaudio`
-- `tensorflow` or `torch`
-
----
-
-## Contributing
-Contributions are welcome! Please follow these steps:
-1. Fork the repository.
-2. Create a new branch:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-3. Commit your changes:
-   ```bash
-   git commit -m "Add some feature"
-   ```
-4. Push to your branch:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-5. Open a pull request.
-
----
+- Python 3.7+
+- Dependencies listed in `requirements.txt`
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
+This project is open-source and available under the [MIT License](LICENSE).
